@@ -67,6 +67,6 @@ print('>> Elapsed time: {} sec'.format(round((time.time()-st),2)))
 >> Elapsed time: 5.0 sec
 ```
 
-Now you can clearly see, if we do it without multi threading it would have taken around ``50 Seconds`` for processing the data while doing the task one by one and waiting for ``5 Sec`` after running the function once.
+Now you can clearly see, if we do it without multi threading it would have taken around ``50 Seconds`` for processing the data while doing the task one by one and waiting for ``5 Sec`` after running the function each time.
 
 But since we are doing it with multithreading it will take only ``5 Seconds``  for processing the same task with different data, in their individual threads.
