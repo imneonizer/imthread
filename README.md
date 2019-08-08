@@ -1,5 +1,9 @@
 ## imthread
 
+```python
+pip install imthread
+```
+
 This tiny little python module is useful for creating multiple threads of any function in seconds.
 
 #### Problem Statement
