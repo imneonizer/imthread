@@ -8,7 +8,7 @@ This tiny little python module is useful for creating multiple threads of any fu
 
 #### Problem Statement
 
-Let say  for example, we have a ``list`` of numbers from `1 to 10` and all we wanted to do is `multiply every number by 100` but the  challenge is ``it takes 5 sec`` for multiplying a single number by 100 from the list.
+Let say  for example, we have a ``list`` of numbers from `1 to 10` and all we wanted to do is `multiply every number by 1000` but the  challenge is ``it takes 5 sec`` for multiplying a single number by 100 from the list.
 
 > I know its a arbitary condition, but we can create it with time.sleep(5) function.
 
