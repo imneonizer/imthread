@@ -176,4 +176,4 @@ def my_func(data):
         imthread.stop() #use to kill all threads
 ```
 
-if you don't use ``imthread.stop()`` function then the threads will keep on running and filling ``None`` inplace of returned data. if you used the ``imthread.stop()`` it will kill all active threads immediately and will retuned the data that were returned by your function till now in a list.
+if you don't use ``imthread.stop()`` function then the threads will keep on running and filling ``None`` inplace of returned data. if you used the ``imthread.stop()`` it will kill all active threads immediately and will return the data that were processed by your function so far.
