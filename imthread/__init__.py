@@ -1,2 +1,3 @@
-from imthread.imthread import multi_threading
+from imthread.imthread import multi_threading, console_log, thread_idx
+
 
