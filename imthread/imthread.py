@@ -1,4 +1,4 @@
-import threading
+import threading, time
 
 t_index = 0
 class multi_threading():
@@ -8,27 +8,44 @@ class multi_threading():
         if max_threads < 4:
             print('Warning! max_threads < 4 is not advisable to use')
         self.process = processing_func
-        self.max_threads = max_threads
+        self.max_threads = max_threads -1
         self.threads_ended = False
+        self.stop_execution = False
 
     def start(self, data):
         index_processed_data = {}
         def process_frames(data):
             global t_index
+
             #do some processing stuff============================
             self.threads_ended = False #informing new thread has started
             t_index = data[0]+1
-            processed_data = self.process(data[1]) #actually processing the data
-            #====================================================
 
-            #adding processed data to a list=====================
-            index_processed_data.update({data[0]:processed_data})
-            #====================================================
+            #handling threads which are asked to stop but are still running
+            if self.stop_execution:
+                return None
 
-            #only setting thread ended to True when the last of
-            #maximum number of threads has finished
-            if data[0]%self.max_threads == 0:
-                self.threads_ended = True
+            try:
+                processed_data = self.process(data[1]) #actually processing the datas
+            except Exception as e:
+                processed_data = None
+                if str(e) == 'stop': #if manually stop exception raised
+                    if not self.stop_execution:
+                        self.stop_execution = True
+                        print('Exception: Stop All Threads')
+                else:
+                    print(e)
+
+            finally:
+                #adding processed data to a list=====================
+                index_processed_data.update({data[0]:processed_data})
+                #====================================================
+
+                #only setting thread ended to True when the last of
+                #maximum number of threads has finished
+                if data[0]%self.max_threads == 0:
+                    self.threads_ended = True
+            #====================================================
 
         threads = []
         for i in range(0,len(data)):
@@ -39,7 +56,11 @@ class multi_threading():
             #==================================================================
 
             # starting threads=================================================
+            if self.stop_execution:
+                break
+
             threads.append(t)
+            t.daemon = True
             t.start()
 
             #checking if max number of threads has been created
@@ -47,12 +68,16 @@ class multi_threading():
                 #checking if threads has finished
                 if not i == 0: #skipping first batch
                     while self.threads_ended == False:
+                        if self.stop_execution:
+                            break
                         pass
             #==================================================================
 
         #waiting for all the
         #threads to finish
         for t in threads:
+            if self.stop_execution:
+                break
             t.join()
         #=====================================
 
@@ -61,16 +86,17 @@ class multi_threading():
         sorted_data = []
         for i in range(0, len(index)):
             #print(processed_frames[i])
-            sorted_data.append(index_processed_data[i])
+            try:
+                sorted_data.append(index_processed_data[i])
+            except Exception as e:
+                print(e)
         #==============================================
 
         return sorted_data
 
-def console_log():
+def console_log(output=False):
     global t_index
-    print(f'>> Creating Threads {t_index}')
-    return t_index
-
-def thread_idx():
-    global t_index
-    return t_index
+    data = t_index
+    if output:
+        print(f'>> Creating Threads {data}')
+    return data

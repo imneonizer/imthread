@@ -6,15 +6,16 @@ pip install imthread
 
 This tiny little python module is useful for creating multiple threads of any function in seconds.
 
-#### What's new in v0.2.0
+#### What's new in v0.2.1
 
 After using this library for a number of times in various projects i found that if you pass in lots of data say ``1000`` data in a list, it was creating ``1000`` threads to do it all once, however in the practical world most of the times cpu's are not capable of creating so many threads at once or worse it eats up all resources at once. To prevent this problem now you can pass in ``max_threads`` value by default if you don't pass in the value it will automatically be set equal to 4 just for the safety purpose, and passing a `0` value will throw an error  while creating a ``imthread`` object this way it will only create specified number of threads at once and will wait untill the previously started threads has finished their job.
 
 Other than that to keep a track on how many threads are been created in real time you can push in a new log method inn you processing function so that whenever a new thread is created you can see it. there ar two methods of tracking them.
 
-- just to print out the thread number which is being created, use: `` imthread.console_log()``
+- just to print out the thread number which is being created, use: `` imthread.console_log(output=True)``
 - if you want to store it in some variable you can use: ``thread_number = imthread.console_log()``
-- or just to store the thread number quietly, use: ``thread_number = imthread.thread_idx()``
+- in case some error occurs, the thread will keep on running
+- if you want to kill all the threads use ``imthread.stop()`` inside your processing function while handling errors.
 
 #### Problem Statement
 
@@ -156,3 +157,23 @@ So in this new update ``imthread v0.2.0``  we can specify that at once how many 
 
 It is clear that every request to the server was taking approx. ``0.5 seconds`` so while making one request at a time it took ``9.4 seconds`` as expected.
 
+
+
+#### Handling errors and killing all threads
+
+So, by default if any error occurs the threads will keep on running, in case if you want to ignore some errors but if you want to kill all the thread at once you can use ``imthread.stop()`` while handling errors.
+
+```python
+#the function for processing data
+def my_func(data):
+    thread_number = imthread.console_log(output=True)
+    try:
+        data = requests.get("http://httpbin.org/get")
+        return data
+    except Exception as e:
+        print(e) #printing other errors
+        #killing all active threads
+        imthread.stop() #use to kill all threads
+```
+
+if you don't use ``imthread.stop()`` function then the threads will keep on running and filling ``None`` inplace of returned data. if you used the ``imthread.stop()`` it will kill all active threads immediately and will retuned the data that were returned by your function till now in a list.
