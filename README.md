@@ -144,7 +144,7 @@ In this example we didn't used time.sleep() instead we make a request to the web
 
 > Lets try to do it without multithreading and see how it affects the processing time.
 
-So in this new update ``imthread v0.2.0``  we can specify that at once how many threads should be created so lets change the input parameter as ``max_threads = 1``  while creating the imthread object, this way it will only create one thread at a time and will wait until the previous thread has finished properly.
+So in this new update ``imthread v0.2.0``  we can specify that at once how many threads should be created so lets change the input parameter as ``max_threads = 2``  while creating the imthread object, this way it will only create one thread at a time and will wait until the previous thread has finished properly.
 
 #### output
 
