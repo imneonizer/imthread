@@ -8,7 +8,10 @@ class multi_threading():
         if max_threads < 4:
             print('Warning! max_threads < 4 is not advisable to use')
         self.process = processing_func
-        self.max_threads = max_threads -1
+        if max_threads == 1:
+            self.max_threads = max_threads
+        else:
+            self.max_threads = max_threads -1
         self.threads_ended = False
         self.stop_execution = False
 

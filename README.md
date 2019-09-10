@@ -6,7 +6,7 @@ pip install imthread
 
 This tiny little python module is useful for creating multiple threads of any function in seconds.
 
-#### What's new in v0.2.1
+#### What's new in v0.2.2
 
 After using this library for a number of times in various projects i found that if you pass in lots of data say ``1000`` data in a list, it was creating ``1000`` threads to do it all once, however in the practical world most of the times cpu's are not capable of creating so many threads at once or worse it eats up all resources at once. To prevent this problem now you can pass in ``max_threads`` value by default if you don't pass in the value it will automatically be set equal to 4 just for the safety purpose, and passing a `0` value will throw an error  while creating a ``imthread`` object this way it will only create specified number of threads at once and will wait untill the previously started threads has finished their job.
 
