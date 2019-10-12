@@ -159,7 +159,42 @@ So in this new update ``imthread v0.2.0``  we can specify that at once how many 
 
 It is clear that every request to the server was taking approx. ``0.5 seconds`` so while making one request at a time it took ``9.4 seconds`` as expected.
 
+### Example 3
 
+Quick Launch mode, a new feature is added where you can directly use imthread to pass in the repetitive function, input data for those functions and how many threads you want it to create at a time. other than that if you just want it to repeat the function without any inputs you can do that too.
+
+````python
+import imthread
+import time
+import random
+
+names = ['April', 'May']
+
+#the function for processing data
+def my_func(data):
+    imthread.console_log(output=True)
+    time.sleep(1)
+    name = random.choice(names)
+    return f'{name} says, Hello World!'
+
+processed_data = imthread.start(my_func, repeat=4)
+
+print(processed_data)
+imthread.elapsed(output=True)
+````
+
+### output
+
+````
+>> Creating Threads 1
+>> Creating Threads 2
+>> Creating Threads 3
+>> Creating Threads 4
+['May says, Hello World!', 'April says, Hello World!', 'May says, Hello World!', 'April says, Hello World!']
+>> Elapsed time: 1.0 sec
+````
+
+we kept a time gap of 1 sec inside the function still it repeated the task 4 times in same time. since it can access the global variables we can assign certain tasks that don't need different inputs every time.
 
 #### Handling errors and killing all threads
 
