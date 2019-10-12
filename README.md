@@ -6,9 +6,11 @@ pip install imthread
 
 This tiny little python module is useful for creating multiple threads of any function in seconds.
 
-#### What's new in v0.2.2
+#### What's new in v1.0
 
-After using this library for a number of times in various projects i found that if you pass in lots of data say ``1000`` data in a list, it was creating ``1000`` threads to do it all once, however in the practical world most of the times cpu's are not capable of creating so many threads at once or worse it eats up all resources at once. To prevent this problem now you can pass in ``max_threads`` value by default if you don't pass in the value it will automatically be set equal to 4 just for the safety purpose, and passing a `0` value will throw an error  while creating a ``imthread`` object this way it will only create specified number of threads at once and will wait untill the previously started threads has finished their job.
+A quick launch mode is added, just type ``imthread.start(func_name, repeat=10)`` and it will execute the given function given number of times in parallel. A standard way of measuring elapsed time is added as well. see examples below to understand how to use quick launch mode.
+
+After using this library for a number of times in various projects i found that if you pass in lots of data say ``1000`` data in a list, it was creating ``1000`` threads to do it all once, how ever in the practical world most of the times cpu's are not capable of creating so many threads at once or worse it eats up all resources at once. To prevent this problem now you can pass in ``max_threads`` value by default if you don't pass in the value it will automatically be set equal to 4 just for the safety purpose, and passing a `0` value will throw an error  while creating a ``imthread`` object this way it will only create specified number of threads at once and will wait untill the previously started threads has finished their job.
 
 Other than that to keep a track on how many threads are been created in real time you can push in a new log method inn you processing function so that whenever a new thread is created you can see it. there ar two methods of tracking them.
 

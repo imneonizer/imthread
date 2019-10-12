@@ -2,11 +2,9 @@ import threading, time
 
 t_index = 0
 class multi_threading():
-    def __init__(self, processing_func, max_threads=4):
-        assert type(max_threads) == int, 'max_threads value should be a integer'
-        assert max_threads >0, 'max_threads Cannot be less than 1'
-        if max_threads < 4:
-            print('Warning! max_threads < 4 is not advisable to use')
+    def __init__(self, processing_func, max_threads=10):
+        assert type(max_threads) == int, 'max_threads value should be an integer'
+        assert max_threads >0, 'max_threads value cannot be less than 1'
         self.process = processing_func
         if max_threads == 1:
             self.max_threads = max_threads
@@ -16,6 +14,11 @@ class multi_threading():
         self.stop_execution = False
 
     def start(self, data):
+        if type(data) == int:
+            pseudo_infinity = data
+        else:
+            pseudo_infinity = len(data)
+
         index_processed_data = {}
         def process_frames(data):
             global t_index
@@ -29,7 +32,7 @@ class multi_threading():
                 return None
 
             try:
-                processed_data = self.process(data[1]) #actually processing the datas
+                processed_data = self.process(data[1]) #actually processing the data
             except Exception as e:
                 processed_data = None
                 if str(e) == 'stop': #if manually stop exception raised
@@ -51,9 +54,13 @@ class multi_threading():
             #====================================================
 
         threads = []
-        for i in range(0,len(data)):
+        for i in range(0, pseudo_infinity):
             # creating threads=================================================
-            index_data = data[i]
+            try:
+                index_data = data[i]
+            except Exception:
+                index_data = i
+
             args = (i,index_data)
             t = threading.Thread(target=process_frames, name='t', args=(args,))
             #==================================================================
