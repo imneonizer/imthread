@@ -36,43 +36,39 @@ So what this module does is, at the time of object initialization it takes in th
 import imthread
 import time
 
-st = time.time()
 #the function for processing data
 def my_func(data):
-    print('>> Running Thread {}...'.format(data))
+    print(f'>> Running Thread {imthread.console_log()}')
     data = data*1000
     time.sleep(5)
     return data
-
-#building a imthreading object
-multi_threading = imthread.multi_threading(my_func, max_threads=10)
 
 #list of input data for processing
 raw_data = [1,2,3,4,5,6,7,8,9,10]
 
 #sending arguments for asynchronous multi thread processing
-processed_data = multi_threading.start(raw_data)
+processed_data = imthread.start(my_func, data=raw_data, max_threads=10)
 
 #printing the synchronised received results
 print()
-print('>> Input: {}'.format(raw_data))
-print('>> Result: {}'.format(processed_data))
-print('>> Elapsed time: {} sec'.format(round((time.time()-st),2)))
+print(f'>> Input: {raw_data}')
+print(f'>> Result: {processed_data}')
+print(f'>> Elapsed time: {imthread.elapsed()} sec')
 ```
 
 #### output
 
 ```python
->> Running Thread 1...
->> Running Thread 2...
->> Running Thread 3...
->> Running Thread 4...
->> Running Thread 5...
->> Running Thread 6...
->> Running Thread 7...
->> Running Thread 8...
->> Running Thread 9...
->> Running Thread 10...
+>> Running Thread 1
+>> Running Thread 2
+>> Running Thread 3
+>> Running Thread 4
+>> Running Thread 5
+>> Running Thread 6
+>> Running Thread 7
+>> Running Thread 8
+>> Running Thread 9
+>> Running Thread 10
 
 >> Input: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 >> Result: [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000]
@@ -85,33 +81,21 @@ Now you can clearly see, if we do it without multi threading it would have taken
 
 ````python
 import imthread
-import time
 import requests
 
-st = time.time()
 #the function for processing data
 def my_func(data):
-    imthread.console_log()
+    imthread.console_log(output=True)
     data = requests.get("http://httpbin.org/get")
     return data
 
-#building a imthreading object
-multi_threading = imthread.multi_threading(my_func, max_threads=20)
-
-#list of input data for processing
-raw_data = []
-for i in range(1,21):
-    raw_data.append(i)
-
 #sending arguments for asynchronous multi thread processing
-processed_data = multi_threading.start(raw_data)
+processed_data = imthread.start(my_func, repeat=20, max_threads=20)
 
 #printing the synchronised received results
 print()
-#print('>> Input: {}'.format(raw_data))
-print('>> Result: {}'.format(processed_data))
-print('>> Elapsed time: {} sec'.format(round((time.time()-st),2)))
-
+print(f'>> Result: {processed_data}')
+imthread.elapsed(output=True)
 ````
 
 #### output
@@ -139,14 +123,14 @@ print('>> Elapsed time: {} sec'.format(round((time.time()-st),2)))
 >> Creating Threads 20
 
 >> Result: [<Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>, <Response [200]>]
->> Elapsed time: 0.5 sec
+>> Elapsed time: 0.55 sec
 ````
 
 In this example we didn't used time.sleep() instead we make a request to the webserver and it took ``0.5 seconds`` to get the result back so we did it 20 times with multi threading and were able to receive the results in less time in a synchronous order.
 
 > Lets try to do it without multithreading and see how it affects the processing time.
 
-So in this new update ``imthread v0.2.0``  we can specify that at once how many threads should be created so lets change the input parameter as ``max_threads = 2``  while creating the imthread object, this way it will only create one thread at a time and will wait until the previous thread has finished properly.
+So in this new update ``imthread v1.0``  we can specify that at once how many threads should be created so lets change the input parameter as ``max_threads = 1``  this way it will only create one thread at a time and will wait until the previous thread has finished properly.
 
 #### output
 
@@ -154,10 +138,10 @@ So in this new update ``imthread v0.2.0``  we can specify that at once how many 
 .
 .
 .
->> Elapsed time: 9.64 sec
+>> Elapsed time: 6.43 sec
 ````
 
-It is clear that every request to the server was taking approx. ``0.5 seconds`` so while making one request at a time it took ``9.4 seconds`` as expected.
+It is clear that every request to the server was taking approx. ``0.5 seconds`` so while making one request at a time it took ``6.43 seconds`` as expected.
 
 ### Example 3
 
@@ -213,4 +197,4 @@ def my_func(data):
         imthread.stop() #use to kill all threads
 ```
 
-if you don't use ``imthread.stop()`` function then the threads will keep on running and filling ``None`` inplace of returned data. if you used the ``imthread.stop()`` it will kill all active threads immediately and will return the data that were processed by your function so far.
+if you don't use ``imthread.stop()`` function then the threads will keep on running and filling ``None`` in place of returned data. if you used the ``imthread.stop()`` it will kill all active threads immediately and will return the data that were processed by your function so far.
