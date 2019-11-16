@@ -180,6 +180,106 @@ imthread.elapsed(output=True)
 
 we kept a time gap of 1 sec inside the function still it repeated the task 4 times in same time. since it can access the global variables we can assign certain tasks that don't need different inputs every time.
 
+#### Decorators support
+
+Apart from calling the ``start()`` attribute we can also use decorators to explicitly make our functions for concurrent execution.
+
+**Example 1**
+
+````python
+import imthread
+import time
+
+@imthread.run(repeat=5, max_threads=5)
+def my_func(i):
+    time.sleep(1)
+    return i*2
+
+print(imthread.result['my_func'])
+````
+
+**Output**
+
+````python
+[0, 2, 4, 6, 8]
+````
+
+This will execute the function as soon as you run your python code, in this case we are trying to perform the same task five times in a row concurrently. The final output of all the function can be accessed by ``imthread.result['function_name']``. Notice if you set your function on repeat it will always receive a parameter which is it's thread number.
+
+----
+
+**Example 2**
+
+````python
+import imthread
+import time
+
+@imthread.run(data=[1,2,3,4,5,6], max_threads=5)
+def my_func(i):
+    time.sleep(1)
+    return i*2
+
+print(imthread.result['my_func'])
+````
+
+**Output**
+
+````python
+[2, 4, 6, 8, 10, 12]
+````
+
+In this case we are directly passing our arguments in a list via decorator and receiving the result same way as we did in previous example.
+
+----
+
+**Exampe 3**
+
+````python
+import imthread
+import time
+
+@imthread.set(max_threads=10)
+def my_func(i):
+    time.sleep(1)
+    return i*2
+
+result = my_func(repeat=7)
+print(result)
+````
+
+**Output**
+
+````python
+[0, 2, 4, 6, 8, 10, 12]
+````
+
+This is an another cool way to first convert your function in concurrent function and then passing the argument as how many time you want to execute that function all in parallel.
+
+----
+
+**Example 4**
+
+````python
+import imthread
+import time
+
+@imthread.set()
+def my_func(i):
+    time.sleep(1)
+    return i*2
+
+result = my_func([5,6,7])
+print(result)
+````
+
+**Output**
+
+````python
+[10, 12, 14]
+````
+
+Again we can also specify what arguments we want to pass to the function to process it concurrently. if in the ``@imthread.set()`` decorator you won't pass any ``max_threads`` argument ``max_threads=10`` will be set.
+
 #### Handling errors and killing all threads
 
 So, by default if any error occurs the threads will keep on running, in case if you want to ignore some errors but if you want to kill all the thread at once you can use ``imthread.stop()`` while handling errors.

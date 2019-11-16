@@ -33,6 +33,7 @@ class multi_threading():
 
             try:
                 processed_data = self.process(data[1]) #actually processing the data
+
             except Exception as e:
                 processed_data = None
                 if str(e) == 'stop': #if manually stop exception raised
