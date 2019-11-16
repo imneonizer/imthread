@@ -180,7 +180,7 @@ imthread.elapsed(output=True)
 
 we kept a time gap of 1 sec inside the function still it repeated the task 4 times in same time. since it can access the global variables we can assign certain tasks that don't need different inputs every time.
 
-#### Decorators support
+### Decorators support
 
 Apart from calling the ``start()`` attribute we can also use decorators to explicitly make our functions for concurrent execution.
 
